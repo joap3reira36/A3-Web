@@ -24,7 +24,7 @@ def index():
     try:
         conn = get_db_connection(CONNECTION_STRING)
         cursor = conn.cursor()
-        cursor.execute('select Conteudo, Dataregistro from MensagemProjeto order by id desc')
+        cursor.execute('select * from Logins')
         row = cursor.fetchone()
         conn.close
 

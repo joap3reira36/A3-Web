@@ -55,6 +55,47 @@ def login():
     except Exception as e:
         return jsonify({"status": "erro_de_conexao", "detalhes": str(e)}), 500
 
+
+@app.route('/register', methods=['POST'])
+def register():
+    dados = request.get_json()
+    login_usuario = dados['login']
+    senha_usuario = dados['senha']
+
+
+    
+    if not login_usuario or not senha_usuario:
+        return jsonify({"status": "erro", "mensagem": "Login e senha são necessários"}), 400
+    
+    try:
+        conn = get_db_connection(CONNECTION_STRING)
+        cursor = conn.cursor()
+
+        cursor.execute('select count(*) from Users where LoginUser = ?', (login_usuario,))
+        existe = cursor.fetchone()[0]
+
+        if existe > 0:
+            return jsonify({"status":"erro", "mensagem":"Login ja existente"}), 409
+
+
+        cursor.execute('''
+            insert into Users
+            values (?, ?)           
+        ''', (login_usuario, senha_usuario))
+        conn.commit()
+        conn.close()
+
+        
+        return jsonify({
+            "status": "sucesso", 
+            "mensagem": f"Login {login_usuario} criado"    
+        }), 201
+    
+
+    except Exception as e:
+        return jsonify({"status": "erro_de_conexao", "detalhes": str(e)}), 500
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
     

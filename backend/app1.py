@@ -1,12 +1,14 @@
 import os
 import pyodbc
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from dotenv import load_dotenv
 
 
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
 DB_SERVER = os.environ.get('DB_SERVER') 
 DB_NAME = "A3"                   
@@ -18,6 +20,10 @@ CONNECTION_STRING = f'DRIVER={{ODBC Driver 18 for SQL Server}};SERVER={DB_SERVER
 def get_db_connection(CONNECTION_STRING):
     conn = pyodbc.connect(CONNECTION_STRING)
     return conn
+
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({"status": "ok"}), 200
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -59,6 +65,10 @@ def login():
 @app.route('/register', methods=['POST'])
 def register():
     dados = request.get_json()
+
+    if not dados or 'login' not in dados or 'senha' not in dados:
+        return jsonify({"status": "erro", "mensagem": "Login e senha são necessários"}), 400
+
     login_usuario = dados['login']
     senha_usuario = dados['senha']
 

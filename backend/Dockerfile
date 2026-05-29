@@ -23,6 +23,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 8. Copia seus arquivos
 COPY . .
 
-# 9. Libera a porta e roda o app1.py
+# 9. Libera a porta e roda o app com Gunicorn
 EXPOSE 5000
-CMD ["python", "app1.py"]
+CMD ["gunicorn", "app1:app", "--bind", "0.0.0.0:5000"]

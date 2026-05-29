@@ -10,8 +10,8 @@ RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor
 # 4. Adiciona o repositório oficial da Microsoft
 RUN curl -fsSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list
 
-# 5. Instala o Driver ODBC 17
-RUN apt-get update && ACCEPT_EULA=Y apt-get install -y msodbcsql17
+# 5. Instala o Driver ODBC 18
+RUN apt-get update && ACCEPT_EULA=Y apt-get install -y msodbcsql18
 
 # 6. Configura a pasta da aplicação
 WORKDIR /app

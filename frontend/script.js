@@ -125,6 +125,28 @@ function saveMockUsers(users) {
     localStorage.setItem('a3_mock_users', JSON.stringify(users));
 }
 
+async function getDashboardUsers() {
+    if (apiOnline && !isDemoMode) {
+        try {
+            const response = await fetch(`${API_URL}/users`);
+            const data = await response.json();
+
+            if (response.ok && data.status === "sucesso") {
+                return data.usuarios.map(u => ({
+                    id: u.id,
+                    login: u.login,
+                    date: u.date || '-',
+                    role: u.role || 'Banco SQL Server'
+                }));
+            }
+        } catch (error) {
+            console.error("Users fetch error:", error);
+        }
+    }
+
+    return getMockUsers();
+}
+
 function resetLocalStorageUsers() {
     localStorage.removeItem('a3_mock_users');
     initializeMockDatabase();
@@ -486,10 +508,10 @@ function switchDashboardTab(tabName) {
     if (tabName === 'settings') headerTitle.textContent = "Parâmetros do Sistema";
 }
 
-function updateOverviewStats() {
+async function updateOverviewStats() {
     // 1. Total users
-    const userCount = getMockUsers().length;
-    document.getElementById('stat-total-users').textContent = isDemoMode ? userCount : (apiOnline ? `${userCount} +` : userCount);
+    const userCount = (await getDashboardUsers()).length;
+    document.getElementById('stat-total-users').textContent = userCount;
 
     // 2. Ping time simulation
     const pingEl = document.getElementById('stat-ping-time');
@@ -510,9 +532,9 @@ function updateOverviewStats() {
     }
 }
 
-function refreshUsersTable(filterText = "") {
+async function refreshUsersTable(filterText = "") {
     const tbody = document.getElementById('users-table-body');
-    const users = getMockUsers();
+    const users = await getDashboardUsers();
     tbody.innerHTML = '';
 
     const query = filterText.toLowerCase().trim();

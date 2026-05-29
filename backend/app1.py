@@ -37,6 +37,32 @@ def db_test():
     except Exception as e:
         return jsonify({"status": "erro_de_conexao", "detalhes": str(e)}), 500
 
+@app.route('/users', methods=['GET'])
+def list_users():
+    try:
+        conn = get_db_connection(CONNECTION_STRING)
+        cursor = conn.cursor()
+        cursor.execute('''
+            select IdUser, LoginUser
+            from Users
+            order by IdUser
+        ''')
+        rows = cursor.fetchall()
+        conn.close()
+
+        users = [
+            {
+                "id": row.IdUser,
+                "login": row.LoginUser,
+                "role": "Banco SQL Server"
+            }
+            for row in rows
+        ]
+
+        return jsonify({"status": "sucesso", "usuarios": users}), 200
+    except Exception as e:
+        return jsonify({"status": "erro_de_conexao", "detalhes": str(e)}), 500
+
 @app.route('/login', methods=['POST'])
 def login():
     dados = request.get_json()
@@ -101,8 +127,8 @@ def register():
 
 
         cursor.execute('''
-            insert into Users
-            values (?, ?)           
+            insert into Users (LoginUser, PasswordUser)
+            values (?, ?)
         ''', (login_usuario, senha_usuario))
         conn.commit()
         conn.close()

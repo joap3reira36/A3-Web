@@ -1,5 +1,5 @@
 // --- FRONTEND STATE MANAGEMENT ---
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://a3-web-1.onrender.com';
 let isDemoMode = false;
 let apiOnline = false;
 let currentUser = null;

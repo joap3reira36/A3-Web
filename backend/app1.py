@@ -25,6 +25,18 @@ def get_db_connection(CONNECTION_STRING):
 def health():
     return jsonify({"status": "ok"}), 200
 
+@app.route('/db-test', methods=['GET'])
+def db_test():
+    try:
+        conn = get_db_connection(CONNECTION_STRING)
+        cursor = conn.cursor()
+        cursor.execute("SELECT 1")
+        result = cursor.fetchone()[0]
+        conn.close()
+        return jsonify({"status": "ok", "db": result}), 200
+    except Exception as e:
+        return jsonify({"status": "erro_de_conexao", "detalhes": str(e)}), 500
+
 @app.route('/login', methods=['POST'])
 def login():
     dados = request.get_json()

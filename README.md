@@ -1,4 +1,4 @@
-# A3-Web
+# Backend API
 
 Aplicação web desenvolvida para a A3 da UC de Sistemas de Comunicação e Redes.
 
@@ -68,7 +68,3 @@ Se houver uso de Docker, você também pode adaptar a execução conforme o `Doc
 ## Autor
 
 Desenvolvido por **joap3reira36**.
-
-## Licença
-
-Este projeto não possui licença definida no momento.

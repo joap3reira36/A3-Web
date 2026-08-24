@@ -11,7 +11,7 @@ app = Flask(__name__)
 CORS(app)
 
 DB_SERVER = os.environ.get('DB_SERVER') 
-DB_NAME = "A3"                   
+DB_NAME = os.environ.get('DB_NAME')                  
 DB_USER = os.environ.get('DB_USER')                         
 DB_PASS = os.environ.get('DB_PASS')
 

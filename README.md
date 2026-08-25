@@ -132,27 +132,6 @@ Caso as credenciais sejam inválidas:
 
 ---
 
-## 🩺 Health Check
-
-### API
-
-```http
-GET /health
-```
-
-Resposta:
-
-```json
-{
-  "status": "ok"
-}
-```
-
-### Banco de dados
-
-```http
-GET /db-test
-```
 
 A rota executa uma consulta simples no SQL Server para verificar se a API consegue se comunicar corretamente com o banco.
 
@@ -329,9 +308,9 @@ As próximas alterações incluem:
 * [x] Dockerfile
 * [x] SQL Server com Docker Compose
 * [x] Persistência utilizando Docker Volume
-* [ ] Hash de senhas com bcrypt
-* [ ] Refatoração da estrutura do projeto
-* [ ] Separação de rotas e serviços
+* [x] Hash de senhas com bcrypt
+* [x] Refatoração da estrutura do projeto
+* [x] Separação de rotas
 * [ ] Testes automatizados
 * [ ] JWT
 * [ ] Documentação Swagger / OpenAPI

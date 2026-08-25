@@ -2,29 +2,29 @@
 
 API REST desenvolvida em **Python** com **Flask** e integração com **Microsoft SQL Server**.
 
-O projeto tem como objetivo praticar e demonstrar conceitos de desenvolvimento backend, integração com banco de dados, criação de endpoints REST, configuração por variáveis de ambiente e containerização com Docker.
+O projeto tem como objetivo praticar e demonstrar conceitos de desenvolvimento backend, integração com banco de dados, criação de endpoints REST, configuração por variáveis de ambiente e uso de Docker.
 
 ---
 
 ## 🚀 Tecnologias
 
-![Python](https://img.shields.io/badge/Python-3.9-3776AB?style=for-the-badge\&logo=python\&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=for-the-badge\&logo=flask\&logoColor=white)
-![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC292B?style=for-the-badge\&logo=microsoftsqlserver\&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge\&logo=docker\&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.9-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=for-the-badge&logo=flask&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC292B?style=for-the-badge&logo=microsoftsqlserver&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
 ### Principais tecnologias
 
-* Python
-* Flask
-* Microsoft SQL Server
-* pyodbc
-* ODBC Driver 18 for SQL Server
-* Docker
-* Docker Compose
-* Gunicorn
-* python-dotenv
-* Flask-CORS
+- Python
+- Flask
+- Microsoft SQL Server
+- pyodbc
+- ODBC Driver 18 for SQL Server
+- Docker
+- Docker Compose
+- Gunicorn
+- python-dotenv
+- Flask-CORS
 
 ---
 
@@ -32,17 +32,17 @@ O projeto tem como objetivo praticar e demonstrar conceitos de desenvolvimento b
 
 Atualmente a API possui:
 
-* Health check da aplicação
-* Teste de conexão com o SQL Server
-* Listagem de usuários
-* Cadastro de usuários
-* Login de usuários
-* Validação de usuários duplicados
-* Comunicação com SQL Server utilizando queries parametrizadas
-* Configuração do banco através de variáveis de ambiente
-* Execução da aplicação com Gunicorn
-* Ambiente SQL Server utilizando Docker Compose
-* Persistência dos dados do SQL Server através de Docker Volume
+- Health check da aplicação
+- Teste de conexão com o SQL Server
+- Listagem de usuários
+- Cadastro de usuários
+- Login de usuários
+- Validação de usuários duplicados
+- Comunicação com SQL Server utilizando queries parametrizadas
+- Configuração do banco através de variáveis de ambiente
+- Execução da aplicação com Gunicorn
+- Ambiente SQL Server utilizando Docker Compose
+- Persistência dos dados do SQL Server através de Docker Volume
 
 ---
 
@@ -132,8 +132,9 @@ Caso as credenciais sejam inválidas:
 
 ---
 
+## 🔎 Health check
 
-A rota executa uma consulta simples no SQL Server para verificar se a API consegue se comunicar corretamente com o banco.
+A rota `GET /health` verifica se a API está funcionando corretamente.
 
 ---
 
@@ -242,11 +243,11 @@ http://localhost:5000
 
 O projeto possui um `Dockerfile` preparado com:
 
-* Python 3.9
-* Debian Bullseye
-* Microsoft ODBC Driver 18
-* Gunicorn
-* dependências Python da aplicação
+- Python 3.9
+- Debian Bullseye
+- Microsoft ODBC Driver 18
+- Gunicorn
+- Dependências Python da aplicação
 
 Para construir a imagem:
 
@@ -285,12 +286,12 @@ O projeto está em desenvolvimento e a autenticação ainda será aprimorada.
 
 As próximas alterações incluem:
 
-* Hash de senhas utilizando `bcrypt`
-* Remoção do armazenamento de senhas em texto puro
-* Validações adicionais de entrada
-* Melhor tratamento de conexões com banco
-* Separação da aplicação em módulos
-* Autenticação baseada em tokens
+- Hash de senhas utilizando `bcrypt`
+- Remoção do armazenamento de senhas em texto puro
+- Validações adicionais de entrada
+- Melhor tratamento de conexões com banco
+- Separação da aplicação em módulos
+- Autenticação baseada em tokens
 
 > A versão atual é utilizada como ambiente de estudo e evolução de conceitos de backend e banco de dados.
 
@@ -298,23 +299,23 @@ As próximas alterações incluem:
 
 ## 🗺️ Roadmap
 
-* [x] API Flask
-* [x] Integração com SQL Server
-* [x] Variáveis de ambiente
-* [x] Cadastro de usuários
-* [x] Login
-* [x] Listagem de usuários
-* [x] Health check
-* [x] Dockerfile
-* [x] SQL Server com Docker Compose
-* [x] Persistência utilizando Docker Volume
-* [x] Hash de senhas com bcrypt
-* [x] Refatoração da estrutura do projeto
-* [x] Separação de rotas
-* [ ] Testes automatizados
-* [ ] JWT
-* [ ] Documentação Swagger / OpenAPI
-* [ ] CI/CD com GitHub Actions
+- [x] API Flask
+- [x] Integração com SQL Server
+- [x] Variáveis de ambiente
+- [x] Cadastro de usuários
+- [x] Login
+- [x] Listagem de usuários
+- [x] Health check
+- [x] Dockerfile
+- [x] SQL Server com Docker Compose
+- [x] Persistência utilizando Docker Volume
+- [x] Hash de senhas com bcrypt
+- [x] Refatoração da estrutura do projeto
+- [x] Separação de rotas
+- [ ] Testes automatizados
+- [ ] JWT
+- [ ] Documentação Swagger / OpenAPI
+- [ ] CI/CD com GitHub Actions
 
 ---
 
@@ -324,12 +325,12 @@ Este projeto faz parte do meu portfólio de estudos e desenvolvimento na área d
 
 O objetivo é evoluir a aplicação progressivamente, aplicando conceitos utilizados em projetos reais, principalmente:
 
-* desenvolvimento de APIs
-* integração entre aplicações e bancos de dados
-* SQL Server
-* segurança de aplicações
-* Docker
-* organização e manutenção de código
+- desenvolvimento de APIs
+- integração entre aplicações e bancos de dados
+- SQL Server
+- segurança de aplicações
+- Docker
+- organização e manutenção de código
 
 ---
 

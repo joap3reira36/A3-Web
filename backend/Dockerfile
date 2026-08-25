@@ -25,4 +25,4 @@ COPY . .
 
 # 9. Libera a porta e roda o app com Gunicorn
 EXPOSE 5000
-CMD ["gunicorn", "app1:app", "--bind", "0.0.0.0:5000"]
+CMD ["gunicorn", "run:app", "--bind", "0.0.0.0:5000"]

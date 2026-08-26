@@ -22,7 +22,8 @@ def list_users():
         usuarios = [
             {
                 "id": row.IdUser,
-                "login": row.LoginUser
+                "login": row.LoginUser,
+                "created at": row.CreatedAt.isoformat()
             }
             for row in rows
         ]

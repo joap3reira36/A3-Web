@@ -11,7 +11,7 @@ def list_users():
 
         cursor.execute(
             """
-            SELECT IdUser, LoginUser
+            SELECT IdUser, LoginUser, CreatedAt
             FROM Users
             ORDER BY IdUser
             """

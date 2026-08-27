@@ -1,8 +1,6 @@
-# Backend API | Python + Flask + SQL Server
+# Backend API — Python + Flask + SQL Server
 
-API REST desenvolvida em **Python** com **Flask** e integração com **Microsoft SQL Server**.
-
-O projeto tem como objetivo praticar e demonstrar conceitos de desenvolvimento backend, integração com banco de dados, criação de endpoints REST, configuração por variáveis de ambiente e uso de Docker.
+API REST desenvolvida em **Python** com **Flask** e integrada ao **Microsoft SQL Server**. Este repositório serve como projeto de estudo e portfólio para práticas de desenvolvimento backend, configuração por variáveis de ambiente, conteinerização e integração com banco de dados.
 
 ---
 
@@ -13,36 +11,21 @@ O projeto tem como objetivo praticar e demonstrar conceitos de desenvolvimento b
 ![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC292B?style=for-the-badge&logo=microsoftsqlserver&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-### Principais tecnologias
+Principais dependências:
 
-- Python
+- Python 3.9
 - Flask
-- Microsoft SQL Server
 - pyodbc
 - ODBC Driver 18 for SQL Server
-- Docker
-- Docker Compose
-- Gunicorn
 - python-dotenv
 - Flask-CORS
+- Gunicorn
 
 ---
 
-## 📌 Funcionalidades
+## ✨ Visão geral
 
-Atualmente a API possui:
-
-- Health check da aplicação
-- Teste de conexão com o SQL Server
-- Listagem de usuários
-- Cadastro de usuários
-- Login de usuários
-- Validação de usuários duplicados
-- Comunicação com SQL Server utilizando queries parametrizadas
-- Configuração do banco através de variáveis de ambiente
-- Execução da aplicação com Gunicorn
-- Ambiente SQL Server utilizando Docker Compose
-- Persistência dos dados do SQL Server através de Docker Volume
+A API expõe endpoints para cadastro e autenticação de usuários, listagem e verificação de saúde da aplicação. A comunicação com o banco é feita com queries parametrizadas via pyodbc. O ambiente de banco pode ser executado localmente usando Docker Compose (SQL Server 2022).
 
 ---
 
@@ -58,9 +41,7 @@ Atualmente a API possui:
 
 ---
 
-## 📥 Cadastro de usuário
-
-### `POST /register`
+## 📥 Cadastro de usuário — POST /register
 
 Exemplo de requisição:
 
@@ -71,7 +52,9 @@ Exemplo de requisição:
 }
 ```
 
-Exemplo de resposta:
+Respostas possíveis:
+
+Sucesso (201):
 
 ```json
 {
@@ -80,7 +63,7 @@ Exemplo de resposta:
 }
 ```
 
-Caso o login já exista:
+Login já existente (409):
 
 ```json
 {
@@ -89,21 +72,13 @@ Caso o login já exista:
 }
 ```
 
-Status HTTP:
-
-```text
-201 Created
-409 Conflict
-400 Bad Request
-```
+Requisição inválida (400)
 
 ---
 
-## 🔐 Login
+## 🔐 Login — POST /login
 
-### `POST /login`
-
-Exemplo:
+Exemplo de requisição:
 
 ```json
 {
@@ -112,7 +87,7 @@ Exemplo:
 }
 ```
 
-Em caso de sucesso:
+Sucesso:
 
 ```json
 {
@@ -121,7 +96,7 @@ Em caso de sucesso:
 }
 ```
 
-Caso as credenciais sejam inválidas:
+Credenciais inválidas:
 
 ```json
 {
@@ -134,15 +109,13 @@ Caso as credenciais sejam inválidas:
 
 ## 🔎 Health check
 
-A rota `GET /health` verifica se a API está funcionando corretamente.
+A rota `GET /health` retorna status da aplicação e é indicada para verificações de uptime e readiness.
 
 ---
 
 ## ⚙️ Variáveis de ambiente
 
-As credenciais e configurações do banco de dados não ficam diretamente no código.
-
-Crie um arquivo `.env` dentro da pasta `backend`:
+Crie um arquivo `.env` na pasta `backend` com as configurações do banco:
 
 ```env
 DB_SERVER=localhost
@@ -151,35 +124,27 @@ DB_USER=sa
 DB_PASS=sua_senha
 ```
 
-> Nunca envie o arquivo `.env` com credenciais reais para o GitHub.
+Nunca comite ou publique o arquivo `.env` com credenciais reais.
 
 ---
 
 ## 🐳 SQL Server com Docker Compose
 
-O projeto possui um `docker-compose.yml` para criação de uma instância local do **SQL Server 2022**.
-
-Dentro da pasta `backend`, execute:
+Dentro da pasta `backend`, inicie o ambiente:
 
 ```bash
 docker compose up -d
 ```
 
-O SQL Server ficará disponível na porta:
+O SQL Server ficará disponível na porta `1433`. Os dados são persistidos via Docker Volume.
 
-```text
-1433
-```
-
-Os dados do banco são armazenados em um Docker Volume para que não sejam perdidos quando o container for recriado.
-
-Para verificar os containers:
+Verificar containers:
 
 ```bash
 docker ps
 ```
 
-Para parar o ambiente:
+Parar o ambiente:
 
 ```bash
 docker compose down
@@ -189,73 +154,48 @@ docker compose down
 
 ## 🐍 Executando a API localmente
 
-Clone o repositório:
+Clone o repositório e entre na pasta do backend:
 
 ```bash
 git clone https://github.com/joap3reira36/Backend-API.git
-```
-
-Entre na pasta:
-
-```bash
 cd Backend-API/backend
 ```
 
-Crie um ambiente virtual:
+Crie e ative um ambiente virtual:
 
 ```bash
 python -m venv .venv
-```
-
-### Windows
-
-```bash
+# Windows
 .venv\Scripts\activate
-```
-
-### Linux
-
-```bash
+# Linux / macOS
 source .venv/bin/activate
 ```
 
-Instale as dependências:
+Instale dependências:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Configure o arquivo `.env` e execute:
+Configure o `.env` e execute:
 
 ```bash
 python app1.py
 ```
 
-A API será iniciada em:
-
-```text
-http://localhost:5000
-```
+A aplicação estará em `http://localhost:5000`.
 
 ---
 
-## 🐳 Executando a API com Docker
+## 🐳 Executando com Docker
 
-O projeto possui um `Dockerfile` preparado com:
-
-- Python 3.9
-- Debian Bullseye
-- Microsoft ODBC Driver 18
-- Gunicorn
-- Dependências Python da aplicação
-
-Para construir a imagem:
+Build da imagem:
 
 ```bash
 docker build -t backend-api .
 ```
 
-Para executar:
+Executar o container:
 
 ```bash
 docker run -p 5000:5000 --env-file .env backend-api
@@ -263,7 +203,7 @@ docker run -p 5000:5000 --env-file .env backend-api
 
 ---
 
-## 📁 Estrutura
+## 📁 Estrutura do projeto
 
 ```text
 Backend-API/
@@ -282,18 +222,13 @@ Backend-API/
 
 ## 🔒 Segurança
 
-O projeto está em desenvolvimento e a autenticação ainda será aprimorada.
+Esta versão é para estudo. Melhorias planejadas (prioridade alta):
 
-As próximas alterações incluem:
-
-- Hash de senhas utilizando `bcrypt`
-- Remoção do armazenamento de senhas em texto puro
-- Validações adicionais de entrada
-- Melhor tratamento de conexões com banco
-- Separação da aplicação em módulos
-- Autenticação baseada em tokens
-
-> A versão atual é utilizada como ambiente de estudo e evolução de conceitos de backend e banco de dados.
+- Hash de senhas com `bcrypt` (remover armazenamento em texto plano)
+- Validações de entrada mais rigorosas
+- Tratamento e reaproveitamento de conexões com o banco
+- Separação da aplicação em módulos e rotas
+- Autenticação baseada em tokens (JWT)
 
 ---
 
@@ -302,16 +237,14 @@ As próximas alterações incluem:
 - [x] API Flask
 - [x] Integração com SQL Server
 - [x] Variáveis de ambiente
-- [x] Cadastro de usuários
-- [x] Login
+- [x] Cadastro e login de usuários
 - [x] Listagem de usuários
 - [x] Health check
 - [x] Dockerfile
 - [x] SQL Server com Docker Compose
-- [x] Persistência utilizando Docker Volume
-- [x] Hash de senhas com bcrypt
-- [x] Refatoração da estrutura do projeto
-- [x] Separação de rotas
+- [x] Persistência com Docker Volume
+- [ ] Hash de senhas com bcrypt
+- [ ] Refatoração da estrutura do projeto
 - [ ] Testes automatizados
 - [ ] JWT
 - [ ] Documentação Swagger / OpenAPI
@@ -319,25 +252,14 @@ As próximas alterações incluem:
 
 ---
 
-## 🎯 Objetivo do projeto
+## 🎯 Objetivo
 
-Este projeto faz parte do meu portfólio de estudos e desenvolvimento na área de **Backend e Banco de Dados**.
-
-O objetivo é evoluir a aplicação progressivamente, aplicando conceitos utilizados em projetos reais, principalmente:
-
-- desenvolvimento de APIs
-- integração entre aplicações e bancos de dados
-- SQL Server
-- segurança de aplicações
-- Docker
-- organização e manutenção de código
+Evoluir a aplicação progressivamente aplicando conceitos usados em projetos reais: APIs, integração com bancos, Docker, segurança e organização de código.
 
 ---
 
 ## 👨‍💻 Autor
 
-**João Vitor Pereira**
-
-Backend & Database Developer
+**João Vitor Pereira** — Backend & Database Developer
 
 GitHub: [@joap3reira36](https://github.com/joap3reira36)

@@ -1,12 +1,14 @@
 # Backend API — Python + Flask + SQL Server
 
-API REST desenvolvida em **Python** com **Flask** e integrada ao **Microsoft SQL Server**. Este repositório serve como projeto de estudo e portfólio para práticas de desenvolvimento backend, configuração por variáveis de ambiente, conteinerização e integração com banco de dados.
+API REST desenvolvida em **Python** com **Flask** e integração com **Microsoft SQL Server**.
+
+O projeto tem como objetivo praticar e demonstrar conceitos de desenvolvimento backend, integração com banco de dados, criação de endpoints REST, configuração por variáveis de ambiente e uso de Docker.
 
 ---
 
 ## 🚀 Tecnologias
 
-![Python](https://img.shields.io/badge/Python-3.9-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=for-the-badge&logo=flask&logoColor=white)
 ![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC292B?style=for-the-badge&logo=microsoftsqlserver&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
@@ -17,27 +19,41 @@ Principais dependências:
 - Flask
 - pyodbc
 - ODBC Driver 18 for SQL Server
+- Docker
+- Docker Compose
+- Gunicorn
 - python-dotenv
 - Flask-CORS
 - Gunicorn
 
 ---
 
-## ✨ Visão geral
+## 📌 Funcionalidades
 
-A API expõe endpoints para cadastro e autenticação de usuários, listagem e verificação de saúde da aplicação. A comunicação com o banco é feita com queries parametrizadas via pyodbc. O ambiente de banco pode ser executado localmente usando Docker Compose (SQL Server 2022).
+Atualmente a API possui:
+
+- Health check da aplicação
+- Teste de conexão com o SQL Server
+- Listagem de usuários
+- Cadastro de usuários
+- Login de usuários
+- Validação de usuários duplicados
+- Comunicação com SQL Server utilizando queries parametrizadas
+- Configuração do banco através de variáveis de ambiente
+- Execução da aplicação com Gunicorn
+- Ambiente SQL Server utilizando Docker Compose
+- Persistência dos dados do SQL Server através de Docker Volume
 
 ---
 
 ## 🔌 Endpoints
 
-| Método | Endpoint    | Descrição                            |
-| ------ | ----------- | ------------------------------------ |
-| `GET`  | `/health`   | Verifica se a API está funcionando   |
-| `GET`  | `/db-test`  | Testa a conexão com o SQL Server     |
-| `GET`  | `/users`    | Retorna os usuários cadastrados      |
-| `POST` | `/register` | Cadastra um novo usuário             |
-| `POST` | `/login`    | Realiza a autenticação de um usuário |
+| Método | Endpoint | Descrição |
+| --- | --- | --- |
+| `GET` | `/health` | Verifica se a API está funcionando |
+| `GET` | `/users` | Lista os usuários cadastrados |
+| `POST` | `/register` | Cadastra um novo usuário |
+| `POST` | `/login` | Realiza a autenticação de um usuário |
 
 ---
 
@@ -48,19 +64,23 @@ Exemplo de requisição:
 ```json
 {
   "login": "joao",
-  "senha": "minha_senha"
+  "senha": "Teste123!"
 }
 ```
 
-Respostas possíveis:
-
-Sucesso (201):
+Exemplo de resposta:
 
 ```json
 {
   "status": "sucesso",
-  "mensagem": "Login joao criado"
+  "mensagem": "Usuário criado com sucesso"
 }
+```
+
+Status:
+
+```text
+201 Created
 ```
 
 Login já existente (409):
@@ -68,11 +88,17 @@ Login já existente (409):
 ```json
 {
   "status": "erro",
-  "mensagem": "Login ja existente"
+  "mensagem": "Login já existente"
 }
 ```
 
-Requisição inválida (400)
+Status HTTP:
+
+```text
+201 Created
+409 Conflict
+400 Bad Request
+```
 
 ---
 
@@ -83,7 +109,7 @@ Exemplo de requisição:
 ```json
 {
   "login": "joao",
-  "senha": "minha_senha"
+  "senha": "Teste123!"
 }
 ```
 
@@ -92,57 +118,87 @@ Sucesso:
 ```json
 {
   "status": "sucesso",
-  "mensagem": "Bem-vindo, joao! Login aprovado."
+  "mensagem": "Bem-vindo, joao!"
 }
 ```
 
-Credenciais inválidas:
+Status:
+
+```text
+200 OK
+```
+
+Caso as credenciais sejam inválidas:
 
 ```json
 {
   "status": "erro",
-  "mensagem": "Usuário ou senha inválidos."
+  "mensagem": "Usuário ou senha inválidos"
 }
+```
+
+Status:
+
+```text
+401 Unauthorized
 ```
 
 ---
 
 ## 🔎 Health check
 
-A rota `GET /health` retorna status da aplicação e é indicada para verificações de uptime e readiness.
+A rota `GET /health` verifica se a API está funcionando corretamente.
 
 ---
 
 ## ⚙️ Variáveis de ambiente
 
-Crie um arquivo `.env` na pasta `backend` com as configurações do banco:
+As credenciais e configurações do banco de dados não ficam diretamente no código.
+
+Crie um arquivo `.env` dentro da pasta `backend`:
 
 ```env
 DB_SERVER=localhost
-DB_NAME=seu_banco
+DB_NAME=A3
 DB_USER=sa
 DB_PASS=sua_senha
 ```
 
-Nunca comite ou publique o arquivo `.env` com credenciais reais.
+> Nunca envie o arquivo `.env` com credenciais reais para o GitHub.
 
 ---
 
-## 🐳 SQL Server com Docker Compose
+## 🐳 SQL Server com Docker
 
-Dentro da pasta `backend`, inicie o ambiente:
+O projeto possui um `docker-compose.yml` para criação de uma instância local do **SQL Server 2022**.
+
+Dentro da pasta `backend`, execute:
 
 ```bash
 docker compose up -d
 ```
 
-O SQL Server ficará disponível na porta `1433`. Os dados são persistidos via Docker Volume.
+O SQL Server ficará disponível na porta:
 
-Verificar containers:
+```text
+1433
+```
+
+Os dados do banco são armazenados em um Docker Volume para que não sejam perdidos quando o container for recriado.
+
+Para verificar os containers:
 
 ```bash
 docker ps
 ```
+
+O SQL Server fica disponível através da porta:
+
+```text
+1433
+```
+
+Os dados são armazenados em um Docker Volume, permitindo manter os dados mesmo após o container ser recriado.
 
 Parar o ambiente:
 
@@ -165,9 +221,17 @@ Crie e ative um ambiente virtual:
 
 ```bash
 python -m venv .venv
-# Windows
+```
+
+### Windows
+
+```bash
 .venv\Scripts\activate
-# Linux / macOS
+```
+
+### Linux
+
+```bash
 source .venv/bin/activate
 ```
 
@@ -177,58 +241,134 @@ Instale dependências:
 pip install -r requirements.txt
 ```
 
-Configure o `.env` e execute:
+Configure o arquivo `.env` e execute:
 
 ```bash
-python app1.py
+python run.py
 ```
 
-A aplicação estará em `http://localhost:5000`.
+A API será iniciada em:
 
----
-
-## 🐳 Executando com Docker
-
-Build da imagem:
-
-```bash
-docker build -t backend-api .
-```
-
-Executar o container:
-
-```bash
-docker run -p 5000:5000 --env-file .env backend-api
+```text
+http://localhost:5000
 ```
 
 ---
 
-## 📁 Estrutura do projeto
+## 🐳 Executando a API com Docker
+
+O projeto possui um `Dockerfile` preparado com:
+
+- Python 3.9
+- Debian Bullseye
+- Microsoft ODBC Driver 18
+- Gunicorn
+- Dependências Python da aplicação
+
+Para construir a imagem:
+
+```bash
+python -m pytest -v
+```
+
+Para executar:
+
+```text
+test_health PASSED
+test_register_sem_dados PASSED
+test_login_sem_dados PASSED
+
+3 passed
+```
+
+A cobertura de testes será expandida para incluir autenticação, usuários duplicados, senhas inválidas e listagem de usuários utilizando mocks.
+
+---
+
+## 📁 Estrutura
 
 ```text
 Backend-API/
 │
 ├── backend/
-│   ├── app1.py
+│   │
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── auth.py
+│   │   ├── database.py
+│   │   └── users.py
+│   │
+│   ├── tests/
+│   │   └── test_app.py
+│   │
+│   ├── .env
+│   ├── .gitignore
 │   ├── Dockerfile
 │   ├── docker-compose.yml
 │   ├── requirements.txt
-│   └── .gitignore
+│   └── run.py
 │
+├── .gitignore
 └── README.md
 ```
+
+### Responsabilidades
+
+```text
+auth.py
+├── /register
+└── /login
+
+users.py
+└── /users
+
+database.py
+└── conexão SQL Server
+
+__init__.py
+├── criação da aplicação Flask
+├── registro dos Blueprints
+└── /health
+
+run.py
+└── inicialização da aplicação
+
+tests/
+└── testes automatizados
+```
+
+---
+
+## 🐳 Dockerfile
+
+O projeto também possui um `Dockerfile` preparado para execução da API utilizando:
+
+- Python
+- Debian
+- Microsoft ODBC Driver 18
+- Gunicorn
+- Dependências Python
+
+O ambiente atual de desenvolvimento executa o **SQL Server através do Docker Compose** e a API localmente.
+
+A integração completa da API e do banco no mesmo ambiente Docker poderá ser adicionada futuramente.
 
 ---
 
 ## 🔒 Segurança
 
-Esta versão é para estudo. Melhorias planejadas (prioridade alta):
+O projeto está em desenvolvimento e a autenticação ainda será aprimorada.
 
-- Hash de senhas com `bcrypt` (remover armazenamento em texto plano)
-- Validações de entrada mais rigorosas
-- Tratamento e reaproveitamento de conexões com o banco
-- Separação da aplicação em módulos e rotas
-- Autenticação baseada em tokens (JWT)
+As próximas alterações incluem:
+
+- Hash de senhas utilizando `bcrypt`
+- Remoção do armazenamento de senhas em texto puro
+- Validações adicionais de entrada
+- Melhor tratamento de conexões com banco
+- Separação da aplicação em módulos
+- Autenticação baseada em tokens
+
+> A versão atual é utilizada como ambiente de estudo e evolução de conceitos de backend e banco de dados.
 
 ---
 
@@ -239,22 +379,35 @@ Esta versão é para estudo. Melhorias planejadas (prioridade alta):
 - [x] Variáveis de ambiente
 - [x] Cadastro e login de usuários
 - [x] Listagem de usuários
+- [x] Data de criação dos usuários
 - [x] Health check
+- [x] Queries parametrizadas
 - [x] Dockerfile
 - [x] SQL Server com Docker Compose
-- [x] Persistência com Docker Volume
-- [ ] Hash de senhas com bcrypt
-- [ ] Refatoração da estrutura do projeto
+- [x] Persistência utilizando Docker Volume
+- [x] Hash de senhas com bcrypt
+- [x] Refatoração da estrutura do projeto
+- [x] Separação de rotas
 - [ ] Testes automatizados
 - [ ] JWT
+- [ ] Proteger endpoints autenticados
 - [ ] Documentação Swagger / OpenAPI
 - [ ] CI/CD com GitHub Actions
 
 ---
 
-## 🎯 Objetivo
+## 🎯 Objetivo do projeto
 
-Evoluir a aplicação progressivamente aplicando conceitos usados em projetos reais: APIs, integração com bancos, Docker, segurança e organização de código.
+Este projeto faz parte do meu portfólio de estudos e desenvolvimento na área de **Backend e Banco de Dados**.
+
+O objetivo é evoluir a aplicação progressivamente, aplicando conceitos utilizados em projetos reais, principalmente:
+
+- desenvolvimento de APIs
+- integração entre aplicações e bancos de dados
+- SQL Server
+- segurança de aplicações
+- Docker
+- organização e manutenção de código
 
 ---
 

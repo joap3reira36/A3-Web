@@ -6,12 +6,15 @@ from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 from app import create_app
+from flask_jwt_extended import create_access_token
 
 
 @pytest.fixture
 def client():
-    app = create_app()
-    app.config["TESTING"] = True
+    app = create_app({
+        "TESTING": True,
+        "JWT_SECRET_KEY": "chave-secreta-apenas-para-testes"
+    })
 
     return app.test_client()
 
@@ -67,8 +70,10 @@ def test_register_usuario(client):
             }
         )
 
+    dados = response.get_json()
+
     assert response.status_code == 201
-    assert response.get_json()["status"] == "sucesso"
+    assert dados["status"] == "sucesso"
 
     conn.commit.assert_called_once()
 
@@ -76,7 +81,7 @@ def test_register_usuario(client):
 def test_register_usuario_duplicado(client):
     conn, cursor = criar_banco_fake()
 
-    # 1 significa que já existe usuário
+    # 1 significa que o usuário já existe
     cursor.fetchone.return_value = (1,)
 
     with patch(
@@ -91,8 +96,10 @@ def test_register_usuario_duplicado(client):
             }
         )
 
+    dados = response.get_json()
+
     assert response.status_code == 409
-    assert response.get_json()["status"] == "erro"
+    assert dados["status"] == "erro"
 
     conn.commit.assert_not_called()
 
@@ -138,8 +145,11 @@ def test_login_correto(client):
             }
         )
 
+    dados = response.get_json()
+
     assert response.status_code == 200
-    assert response.get_json()["status"] == "sucesso"
+    assert dados["status"] == "sucesso"
+    assert "access_token" in dados
 
 
 def test_login_senha_errada(client):
@@ -170,13 +180,21 @@ def test_login_senha_errada(client):
             }
         )
 
+    dados = response.get_json()
+
     assert response.status_code == 401
-    assert response.get_json()["status"] == "erro"
+    assert dados["status"] == "erro"
 
 
 # -----------------------
 # USERS
 # -----------------------
+
+def test_users_sem_token(client):
+    response = client.get("/users")
+
+    assert response.status_code == 401
+
 
 def test_listar_usuarios(client):
     conn, cursor = criar_banco_fake()
@@ -190,15 +208,28 @@ def test_listar_usuarios(client):
         SimpleNamespace(
             IdUser=2,
             LoginUser="maria",
-            CreatedAt=datetime(2026, 8, 26, 21, 00)
+            CreatedAt=datetime(2026, 8, 26, 21, 0)
         )
     ]
+
+    with client.application.app_context():
+        token = create_access_token(
+            identity="1",
+            additional_claims={
+                "login": "joao"
+            }
+        )
 
     with patch(
         "app.users.get_db_connection",
         return_value=conn
     ):
-        response = client.get("/users")
+        response = client.get(
+            "/users",
+            headers={
+                "Authorization": f"Bearer {token}"
+            }
+        )
 
     dados = response.get_json()
 

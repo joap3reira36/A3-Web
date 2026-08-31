@@ -1,5 +1,6 @@
 import bcrypt
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import create_access_token
 from app.database import get_db_connection
 
 auth_bp = Blueprint("auth", __name__)
@@ -128,9 +129,17 @@ def login():
                 "mensagem": "Usuário ou senha inválidos"
             }), 401
 
+        access_token = create_access_token(
+            identity=str(usuario.IdUser),
+            additional_claims={
+                "login": usuario.LoginUser
+            }
+        )
+
         return jsonify({
             "status": "sucesso",
-            "mensagem": f"Bem-vindo, {usuario.LoginUser}!"
+            "mensagem": f"Bem-vindo, {usuario.LoginUser}!",
+            "access_token": access_token
         }), 200
 
     except Exception as erro:

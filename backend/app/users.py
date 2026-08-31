@@ -1,9 +1,11 @@
 from flask import Blueprint, jsonify
+from flask_jwt_extended import jwt_required
 from app.database import get_db_connection
 
 users_bp = Blueprint ("user",__name__)
 
 @users_bp.route("/users", methods=["GET"])
+@jwt_required()
 def list_users():
     try:
         conn = get_db_connection()
